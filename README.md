@@ -1,102 +1,74 @@
-# TORdex
+# TORDEX
 
-> **🔍 Knowledge Intelligence Platform**
-> *Transform raw data into actionable intelligence*
+> **Open-source intelligence platform for collecting, correlating, searching, and investigating information across websites, repositories, APIs, documents, and archives.**
 
----
+**Local First • Privacy First • Rust Native**
 
-## ⭐ What is TORdex?
-
-TORdex is a **Knowledge Intelligence Platform** that ingests massive amounts of unstructured information and transforms it into a living, searchable, and actionable intelligence graph.
-
-### 🎯 Mission
-
-> Transform massive amounts of unstructured information into a living intelligence graph that can be **searched, analyzed, monitored, investigated, and automated**.
+[🚀 Quick Start](#quick-start) | [📖 Documentation](./docs) | [🏗️ Architecture](./docs/architecture.md)
 
 ---
 
-## 🏗️ Architecture Philosophy
+## What is TORDEX?
 
-TORdex draws inspiration from the best intelligence platforms:
+TORDEX is an **open-source intelligence operating system**.
 
-| Platform | Inspiration |
-|----------|--------------|
-| Palantir Gotham | Large-scale data integration |
-| Palantir Foundry | Knowledge graph construction |
-| Maltego | Entity relationship mapping |
-| Recorded Future | Threat intelligence |
-| OpenCTI | Collaborative threat intelligence |
-| MISP | Information sharing |
-| Shodan | Internet asset discovery |
-| Wayback Machine | Historical preservation |
-| Sourcegraph | Code intelligence |
-| Common Crawl | Web-scale crawling |
-| Tor Browser | Privacy-first access |
+It continuously collects information from websites, repositories, APIs, documents, archives, and external sources, transforming them into a **searchable, navigable intelligence graph**.
 
-**While remaining:**
-- ✅ **Local First** - All data stays on your infrastructure
-- ✅ **Privacy First** - No telemetry, complete control
-- ✅ **Event Driven** - Real-time processing pipeline
-- ✅ **Knowledge Centric** - Intelligence graph at the core
-- ✅ **Rust Native** - Performance, safety, and reliability
+Think:
+- Palantir for individuals and small teams
+- Maltego with modern automation
+- Sourcegraph for knowledge
+- OpenCTI beyond cybersecurity
 
 ---
 
-## 📊 The Intelligence Pipeline (20 Layers)
+## Why TORDEX?
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        USER INTERFACE                             │
-│  Layer 19: Intelligence Console                                    │
-├─────────────────────────────────────────────────────────────────┤
-│                        DECISION & OUTPUT                           │
-│  Layer 18: Decision Engine      Layer 17: Agent Runtime           │
-│  Layer 16: Intelligence Products Layer 15: Investigation Space   │
-├─────────────────────────────────────────────────────────────────┤
-│                       INTELLIGENCE CORE                            │
-│  Layer 14: Monitoring Engine     Layer 13: Intelligence Engine    │
-│  Layer 12: Search Engine         Layer 11: API Observatory        │
-│  Layer 10: Repository Intelligence                               │
-├─────────────────────────────────────────────────────────────────┤
-│                        KNOWLEDGE GRAPH                             │
-│  Layer 9: Temporal Intelligence Graph                            │
-│  Layer 8: Correlation Engine      Layer 7: Knowledge DNA          │
-│  Layer 6: Knowledge Core                                          │
-├─────────────────────────────────────────────────────────────────┤
-│                         DATA PROCESSING                            │
-│  Layer 5: Processing Fabric      Layer 4: Event Platform          │
-│  Layer 3: Evidence Lake           Layer 2: Collection Sessions     │
-│  Layer 1: Collection Fabric      Layer 0: Sources                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+Modern intelligence workflows are fragmented.
 
-### 📈 Data Flow
+Analysts use browser tabs, search engines, PDFs, Git repositories, APIs, and spreadsheets — none of which talk to each other.
 
-```
-Sources → Collection → Evidence → Processing → Knowledge → Intelligence → Action
-     ↓          ↓          ↓           ↓           ↓           ↓        ↓
-  Layer 0    Layer 1     Layer 3      Layer 5      Layer 6     Layer 13   Layer 19
-```
+**TORDEX unifies them into a single intelligence graph.**
 
-**Raw Data In** → **Intelligence Out**
+**Collect. Correlate. Investigate. Automate.**
 
 ---
 
-## 🛠️ Technology Stack
+## Core Capabilities
 
-| Layer | Technologies |
-|-------|--------------|
-| **Core** | Rust, Tokio |
-| **API** | Axum |
-| **Database** | PostgreSQL |
-| **Storage** | MinIO (S3-compatible) |
-| **Search** | Qdrant (Vector) |
-| **Messaging** | Redis Streams |
-| **Crawling** | Reqwest, Lightpanda, Chromium + Playwright |
-| **Code Analysis** | Git2, Tree-sitter, Syn |
-| **AI/ML** | Candle.rs, ONNX Runtime, Ollama |
-| **Observability** | OpenTelemetry, Prometheus, Grafana |
-| **Frontend** | Leptos, Tauri |
+### 📥 Collection
+Websites, APIs, repositories, documents, archives — all in one place.
+
+### 🧠 Intelligence
+Entity extraction, correlation, similarity analysis, temporal tracking.
+
+### 🔍 Investigation
+Case workspaces, evidence linking, timeline reconstruction.
+
+### 🔎 Search
+Full-text, semantic search, knowledge graph traversal.
+
+### ⚡ Automation
+Monitoring, alerting, agents, reports.
+
+---
+
+## The Flow
+
+```
+GitHub Repo
+  + Company Website
+  + API Docs
+  + Archived Pages
+      ↓
+  TORDEX
+      ↓
+  Entity Graph
+      ↓
+  Investigation Workspace
+      ↓
+  Actionable Intelligence
+```
 
 ---
 
@@ -107,148 +79,61 @@ Sources → Collection → Evidence → Processing → Knowledge → Intelligenc
 - PostgreSQL
 - Redis
 - MinIO (or S3-compatible storage)
-- Qdrant (optional, for vector search)
 
 ### Installation
 ```bash
-# Clone the repository
 git clone https://github.com/your-org/tordex
 cd tordex
-
-# Build
 cargo build --release
-
-# Run
 ./target/release/tordex
 ```
 
-*Detailed setup instructions coming soon!*
+---
+
+## Current Status
+
+**TORDEX is under active development.**
+
+| Status | Component |
+|--------|-----------|
+| ✅ Implemented | Collection Framework |
+| ✅ Implemented | Evidence Lake |
+| ✅ Implemented | Event Platform |
+| 🔄 In Progress | Search Engine |
+| 🔄 In Progress | Investigation Workspace |
+| 📋 Planned | Agent Runtime |
+| 📋 Planned | Intelligence Products |
 
 ---
 
-## 📚 Documentation
+## Built With
 
-| Document | Description |
-|----------|-------------|
-| [📖 Architecture](./docs/architecture.md) | Deep dive into all 20 layers |
-| [💻 Technology Stack](./docs/technology-stack.md) | Complete tech breakdown |
-| [🏠 Overview](./docs/index.md) | Quick reference and links |
-
----
-
-## 🎯 Use Cases
-
-- **Threat Intelligence** - Monitor dark web, APIs, and repositories for security threats
-- **Competitive Intelligence** - Track competitor technology stacks and changes
-- **Research Automation** - Automate data collection and analysis pipelines
-- **Compliance Monitoring** - Ensure regulatory compliance through continuous monitoring
-- **Investigative Journalism** - Build evidence-based narratives from disparate data sources
-- **Code Intelligence** - Deep analysis of software projects and dependencies
+- **Core:** Rust, Tokio
+- **API:** Axum
+- **Database:** PostgreSQL
+- **Search:** Qdrant
+- **Storage:** MinIO
+- **Messaging:** Redis Streams
+- **UI:** Leptos, Tauri
 
 ---
 
-## 🔒 Privacy & Security
+## Documentation
 
-- **Local First**: All data processing happens on your infrastructure
-- **No Telemetry**: We don't collect any usage data
-- **Respectful Crawling**: Honors robots.txt and rate limits
-- **Encryption**: Data at rest and in transit can be encrypted
-- **Access Control**: Fine-grained permissions and audit trails
+- [Architecture](./docs/architecture.md) — Deep dive into the 20-layer stack
+- [Technology Stack](./docs/technology-stack.md) — Complete technical breakdown
+- [Overview](./docs/index.md) — Quick reference
 
 ---
 
-## 🤖 Agents
+## License
 
-TORdex includes an **Agent Runtime** (Layer 17) that hosts automated agents:
+MIT License — Copyright (c) 2024 TORDEX Team
 
-| Agent Type | Function |
-|------------|----------|
-| Research Agents | Answer complex questions using the knowledge graph |
-| Architecture Agents | Analyze codebases and software architecture |
-| Monitoring Agents | Track changes and generate alerts |
-| Documentation Agents | Generate reports and summaries |
-| Curator Agents | Improve data quality and remove duplicates |
+[Full License](LICENSE)
 
 ---
 
-## 📊 Key Features
+TORDEX turns information into intelligence.
 
-### Collection
-- Multi-strategy crawling (HTTP, headless, full browser)
-- Session tracking and accountability
-- Rate limiting and polite crawling
-- Evidence preservation (HTML, PDFs, screenshots, HAR files)
-
-### Processing
-- Text extraction from HTML/PDF
-- Entity recognition and extraction
-- Endpoint discovery
-- Repository analysis
-- Fingerprinting and deduplication
-
-### Intelligence
-- Temporal graph with version history
-- Correlation and pattern detection
-- Semantic and keyword search
-- Anomaly detection
-- Automated reporting
-
-### Workspace
-- Investigation management
-- Case tracking with timelines
-- Collaborative research
-- AI-assisted analysis
-- Custom dashboard creation
-
----
-
-## 🌟 Why TORdex?
-
-| Feature | TORdex | Alternatives |
-|---------|--------|--------------|
-| **Local Deployment** | ✅ Yes | ❌ Cloud-only |
-| **Privacy Focus** | ✅ Built-in | ⚠️ Varies |
-| **Event Sourcing** | ✅ Full history | ❌ Limited |
-| **Extensible** | ✅ Plugin architecture | ⚠️ Limited |
-| **Open Source** | ✅ Yes | ❌ Proprietary |
-| **Rust-Based** | ✅ Memory safe | ⚠️ Mixed |
-
----
-
-## 📞 Community & Support
-
-- **Documentation**: [./docs](./docs)
-- **Issues**: GitHub Issues (coming soon)
-- **Discussions**: GitHub Discussions (coming soon)
-- **Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon)
-
----
-
-## 📄 License
-
-*License information will be added here.*
-
----
-
-## 🙏 Acknowledgments
-
-TORdex stands on the shoulders of giants. We're grateful to the open-source community and the teams behind:
-- Rust ecosystem
-- Tokio and Axum
-- PostgreSQL community
-- Redis team
-- MinIO project
-- Qdrant team
-- Lightpanda contributors
-- Playwright team
-- And many more...
-
----
-
-> **💡 Knowledge is power. Intelligence is action.**
->
-> — TORdex Philosophy
-
----
-
-*Built with ❤️ and Rust*
+Built in Rust. Owned by the user. Designed to scale from individual researchers to intelligence teams.
