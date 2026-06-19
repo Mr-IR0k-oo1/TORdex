@@ -1,0 +1,28 @@
+[package]
+name = "tordex-sources"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tordex-core = { workspace = true }
+
+axum = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+serde = { workspace = true }
+serde_json = { workspace = true }
+time = { workspace = true }
+url = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+sqlx = { workspace = true }
+
+[dev-dependencies]
+tordex-core = { workspace = true }

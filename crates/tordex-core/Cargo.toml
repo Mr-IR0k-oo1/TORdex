@@ -1,0 +1,19 @@
+[package]
+name = "tordex-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+ulid = { workspace = true }
+time = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+figment = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }

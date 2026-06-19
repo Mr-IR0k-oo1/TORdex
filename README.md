@@ -4,7 +4,7 @@
 
 **Local First • Privacy First • Rust Native**
 
-[🚀 Quick Start](#quick-start) | [📖 Documentation](./docs) | [🏗️ Architecture](./docs/architecture.md)
+[🚀 Quick Start](#-quick-start) | [📖 Documentation](./docs) | [🏗️ Architecture](./docs/architecture.md)
 
 ---
 
@@ -53,56 +53,113 @@ Monitoring, alerting, agents, reports.
 
 ---
 
-## The Flow
-
-```
-GitHub Repo
-  + Company Website
-  + API Docs
-  + Archived Pages
-      ↓
-  TORDEX
-      ↓
-  Entity Graph
-      ↓
-  Investigation Workspace
-      ↓
-  Actionable Intelligence
-```
-
----
-
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Rust (latest stable)
-- PostgreSQL
-- Redis
-- MinIO (or S3-compatible storage)
+- Rust 1.82+ (we pin `rust-version = "1.82"`)
+- Docker + Docker Compose v2 (for the local backing services)
 
-### Installation
+### 1. Start the backing services
 ```bash
-git clone https://github.com/your-org/tordex
-cd tordex
+cp .env.example .env
+./scripts/dev-up.sh
+```
+This brings up PostgreSQL, Redis, MinIO, and Qdrant with healthchecks.
+
+### 2. Build and run
+```bash
 cargo build --release
 ./target/release/tordex
 ```
+The server listens on `0.0.0.0:8080` (configurable via `TORDEX_HTTP_BIND`).
+The Prometheus metrics endpoint listens on `:9100`.
+
+### 3. Smoke test
+```bash
+# Create a source
+curl -X POST http://localhost:8080/sources \
+  -H 'content-type: application/json' \
+  -d '{"kind":"website","display_name":"Example","locator":"https://example.org","routing_policy":"auto"}'
+# Returns: {"id":"01H...","kind":"website",...}
+
+# Start a collection
+curl -X POST http://localhost:8080/collections \
+  -H 'content-type: application/json' \
+  -H 'Idempotency-Key: smoke-1' \
+  -d '{"source_id":"01H..."}'
+# Returns: 202 {"collection_id":"01H...","status":"accepted"}
+
+# Poll the result
+curl http://localhost:8080/collections/01H...
+# Returns: status + result metadata; collector_used should be "http"
+```
+
+### 4. Verify the event on Redis
+```bash
+docker compose exec redis redis-cli XRANGE tordex:events - +
+```
+You should see a `collection.completed` entry.
+
+### 5. Tear down
+```bash
+./scripts/dev-down.sh
+```
+
+### Integration tests
+```bash
+./scripts/test-integration.sh
+```
+This spins up the stack, runs `cargo test --workspace`, and tears down.
 
 ---
 
-## Current Status
+## 🛠️ Development
 
-**TORDEX is under active development.**
+| Command | Purpose |
+|---|---|
+| `cargo check --workspace` | Type-check the whole workspace |
+| `cargo clippy --workspace --all-targets -- -D warnings` | Lint cleanly |
+| `cargo test --workspace` | Run the test suite (needs services running) |
+| `cargo build --release --features tordex-collection/browser` | Build with the optional browser collector |
+| `./scripts/dev-up.sh` / `./scripts/dev-down.sh` | Manage the local stack |
+
+---
+
+## Project Status
 
 | Status | Component |
 |--------|-----------|
-| ✅ Implemented | Collection Framework |
-| ✅ Implemented | Evidence Lake |
-| ✅ Implemented | Event Platform |
-| 🔄 In Progress | Search Engine |
-| 🔄 In Progress | Investigation Workspace |
-| 📋 Planned | Agent Runtime |
-| 📋 Planned | Intelligence Products |
+| ✅ Implemented | Layer 0 — Sources |
+| ✅ Implemented | Layer 1 — Collection Fabric (HTTP collector; Auto escalation) |
+| ✅ Implemented | Event transport (Redis Streams; in-memory fallback) |
+| 🚧 Partial | Layer 2 — Collection Sessions (stub) |
+| 🚧 Partial | Layer 3 — Evidence Lake (stub) |
+| 🚧 Partial | Layer 4 — Event Platform (stub) |
+| 📋 Planned | Layers 5–19 (Processing, Knowledge Core, …, Intelligence Console) |
+
+The 20-layer roadmap is documented in [`docs/architecture.md`](./docs/architecture.md).
+
+---
+
+## Workspace layout
+
+```
+TORdex/
+├── Cargo.toml                 # workspace manifest
+├── docker-compose.yml         # local dev stack (postgres/redis/minio/qdrant)
+├── .env.example
+├── migrations/                # sqlx versioned SQL (0001 sources, 0002 collections)
+├── scripts/                   # dev-up, dev-down, test-integration
+└── crates/
+    ├── tordex-core/           # IDs, time, config, errors
+    ├── tordex-events/         # EventBus trait + Redis/InMemory impls
+    ├── tordex-sources/        # Layer 0
+    ├── tordex-collection/     # Layer 1
+    ├── tordex-sessions/       # Layer 2 (stub)
+    ├── tordex-evidence/       # Layer 3 (stub)
+    ├── tordex-event-platform/ # Layer 4 (stub)
+    └── tordex-bin/            # main binary
+```
 
 ---
 
@@ -110,11 +167,13 @@ cargo build --release
 
 - **Core:** Rust, Tokio
 - **API:** Axum
-- **Database:** PostgreSQL
+- **Database:** PostgreSQL (sqlx)
 - **Search:** Qdrant
 - **Storage:** MinIO
 - **Messaging:** Redis Streams
-- **UI:** Leptos, Tauri
+- **Browser (optional):** chromiumoxide against Lightpanda/Chromium CDP
+- **Metrics:** Prometheus exporter
+- **UI (planned):** Leptos, Tauri
 
 ---
 
