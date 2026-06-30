@@ -3834,6 +3834,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-package-intel"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 1.0.69",
+ "time",
+ "tordex-core",
+ "tordex-types",
+]
+
+[[package]]
 name = "tordex-processors"
 version = "0.1.0"
 dependencies = [
@@ -3849,6 +3863,7 @@ dependencies = [
  "tordex-algorithms",
  "tordex-core",
  "tordex-knowledge",
+ "tordex-package-intel",
  "tordex-repo-intel",
  "tordex-temporal-graph",
  "tordex-types",

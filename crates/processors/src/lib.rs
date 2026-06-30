@@ -16,6 +16,7 @@ pub mod network;
 pub mod ocr;
 pub mod office;
 pub mod optimization;
+pub mod package_intel_processor;
 pub mod pdf;
 pub mod probability;
 pub mod processing_fabric;
@@ -45,6 +46,7 @@ pub use network::NetworkProcessor;
 pub use ocr::OcrProcessor;
 pub use office::OfficeProcessor;
 pub use optimization::OptimizationProcessor;
+pub use package_intel_processor::PackageIntelProcessor;
 pub use pdf::PdfProcessor;
 pub use probability::ProbabilityProcessor;
 pub use processing_fabric::ProcessingFabric;
@@ -87,6 +89,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(TemporalAlgebraProcessor::new()),
         Box::new(TemporalGraphProcessor::new()),
         Box::new(RepoIntelProcessor::new()),
+        Box::new(PackageIntelProcessor::new()),
     ];
     for proc in processors {
         let _ = registry.register(proc);
