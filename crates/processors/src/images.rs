@@ -19,45 +19,45 @@ impl ImageProcessor {
         use image::GenericImageView;
         let mut results = Vec::new();
 
-        let maybe_img = image::load_from_memory(data).ok();
+        if let Ok(img) = image::load_from_memory(data) {
+            let (w, h) = img.dimensions();
+            results.push(
+                ProcessedObservation::new(
+                    format!("{id}_dimensions"),
+                    "image.dimensions",
+                    format!("{w}x{h}").into_bytes(),
+                    "text/plain",
+                )
+                .with_metadata("width", &w.to_string())
+                .with_metadata("height", &h.to_string())
+                .with_metadata("source_observation", id),
+            );
 
-        let (w, h) = img.dimensions();
-        results.push(
-            ProcessedObservation::new(
-                format!("{id}_dimensions"),
-                "image.dimensions",
-                format!("{w}x{h}").into_bytes(),
-                "text/plain",
-            )
-            .with_metadata("width", &w.to_string())
-            .with_metadata("height", &h.to_string())
-            .with_metadata("source_observation", id),
-        );
+            let color_type = format!("{:?}", img.color());
+            results.push(
+                ProcessedObservation::new(
+                    format!("{id}_color"),
+                    "image.metadata",
+                    color_type.into_bytes(),
+                    "text/plain",
+                )
+                .with_metadata("metric", "color_type")
+                .with_metadata("source_observation", id),
+            );
 
-        let color_type = format!("{:?}", img.color());
-        results.push(
-            ProcessedObservation::new(
-                format!("{id}_color"),
-                "image.metadata",
-                color_type.into_bytes(),
-                "text/plain",
-            )
-            .with_metadata("metric", "color_type")
-            .with_metadata("source_observation", id),
-        );
-
-        let pixel_count = w as u64 * h as u64;
-        results.push(
-            ProcessedObservation::new(
-                format!("{id}_pixels"),
-                "image.metadata",
-                pixel_count.to_string().into_bytes(),
-                "text/plain",
-            )
-            .with_metadata("metric", "pixel_count")
-            .with_metadata("value", &pixel_count.to_string())
-            .with_metadata("source_observation", id),
-        );
+            let pixel_count = w as u64 * h as u64;
+            results.push(
+                ProcessedObservation::new(
+                    format!("{id}_pixels"),
+                    "image.metadata",
+                    pixel_count.to_string().into_bytes(),
+                    "text/plain",
+                )
+                .with_metadata("metric", "pixel_count")
+                .with_metadata("value", &pixel_count.to_string())
+                .with_metadata("source_observation", id),
+            );
+        }
 
         results.push(
             ProcessedObservation::new(
