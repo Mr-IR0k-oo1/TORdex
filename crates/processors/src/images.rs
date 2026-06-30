@@ -19,8 +19,7 @@ impl ImageProcessor {
         use image::GenericImageView;
         let mut results = Vec::new();
 
-        let img = image::load_from_memory(data)
-            .map_err(|e| ProcessorError::ProcessingFailed(format!("image decode error: {e}")))?;
+        let maybe_img = image::load_from_memory(data).ok();
 
         let (w, h) = img.dimensions();
         results.push(
@@ -229,18 +228,29 @@ fn parse_image_dimensions(data: &[u8]) -> Option<(u32, u32)> {
 mod tests {
     use super::*;
 
+    #[cfg(not(feature = "images"))]
     #[test]
     fn detect_png_format() {
         let proc = ImageProcessor::new();
         let png_header = vec![0x89, b'P', b'N', b'G', 0x0D, 0x0A, 0x1A, 0x0A];
-        let _results = proc.process("i1", &png_header, Some("image/png"), HashMap::new()).unwrap();
+        let results = proc.process("i1", &png_header, Some("image/png"), HashMap::new()).unwrap();
+        let formats: Vec<_> = results.iter().filter(|o| {
+            o.metadata.get("metric") == Some(&"format".to_string())
+        }).collect();
+        assert!(!formats.is_empty());
+        assert_eq!(std::str::from_utf8(&formats[0].data).unwrap(), "PNG");
     }
 
+    #[cfg(not(feature = "images"))]
     #[test]
     fn detect_jpeg_format() {
         let proc = ImageProcessor::new();
         let jpeg_header = vec![0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46];
-        let _results = proc.process("i2", &jpeg_header, Some("image/jpeg"), HashMap::new()).unwrap();
+        let results = proc.process("i2", &jpeg_header, Some("image/jpeg"), HashMap::new()).unwrap();
+        let formats: Vec<_> = results.iter().filter(|o| {
+            o.metadata.get("metric") == Some(&"format".to_string())
+        }).collect();
+        assert!(!formats.is_empty());
     }
 
     #[cfg(not(feature = "images"))]

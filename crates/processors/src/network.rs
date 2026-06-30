@@ -223,10 +223,11 @@ mod tests {
     }
 
     #[test]
-    fn unknown_format_errors() {
+    fn unknown_format_still_has_metadata() {
         let proc = NetworkProcessor::new();
         let data = b"\x00\x01\x02\x03";
-        let result = proc.process("n3", data, Some("application/octet-stream"), HashMap::new());
-        assert!(result.is_err());
+        let results = proc.process("n3", data, Some("application/octet-stream"), HashMap::new()).unwrap();
+        let sizes: Vec<_> = results.iter().filter(|o| o.kind == "network.metadata").collect();
+        assert!(!sizes.is_empty());
     }
 }

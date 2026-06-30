@@ -15,7 +15,8 @@ impl RepositoryProcessor {
     }
 
     fn is_git_bundle(&self, data: &[u8]) -> bool {
-        data.len() > 10 && &data[0..10] == b"# v2 git bundle"
+        let sig = b"# v2 git bundle";
+        data.len() > sig.len() && &data[..sig.len()] == sig
     }
 
     fn is_git_pack(&self, data: &[u8]) -> bool {
@@ -39,7 +40,13 @@ impl RepositoryProcessor {
         for line in source.lines() {
             let line = line.trim();
             if line.starts_with('[') && line.ends_with(']') {
-                current_section = line[1..line.len() - 1].to_string();
+                let raw = &line[1..line.len() - 1];
+                // Handle section names like `remote "origin"` -> `remote.origin`
+                let mut parts = Vec::new();
+                for part in raw.split_whitespace() {
+                    parts.push(part.trim_matches('"'));
+                }
+                current_section = parts.join(".");
             } else if let Some(eq_pos) = line.find('=') {
                 let key = line[..eq_pos].trim().to_string();
                 let value = line[eq_pos + 1..].trim().trim_matches('"').to_string();

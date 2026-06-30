@@ -13,10 +13,10 @@ impl VideoProcessor {
     }
 
     fn detect_container(&self, data: &[u8]) -> Option<(&'static str, Option<(u32, u32)>, Option<f64>)> {
-        if data.len() < 16 {
+        if data.len() < 4 {
             return None;
         }
-        match &data[..4] {
+        match &data[..4.min(data.len())] {
             [0x00, 0x00, 0x00, 0x18] | [0x00, 0x00, 0x00, 0x1C] => {
                 // MP4: try to parse ftyp box for dimensions/codec
                 let info = self.parse_mp4_ftyp(data);
@@ -154,10 +154,11 @@ mod tests {
     }
 
     #[test]
-    fn unknown_format_errors() {
+    fn unknown_format_still_has_metadata() {
         let proc = VideoProcessor::new();
         let data = b"\x00\x01\x02\x03\x04\x05\x06\x07";
-        let result = proc.process("v3", data, Some("video/unknown"), HashMap::new());
-        assert!(result.is_err());
+        let results = proc.process("v3", data, Some("video/unknown"), HashMap::new()).unwrap();
+        let sizes: Vec<_> = results.iter().filter(|o| o.kind == "video.metadata").collect();
+        assert!(!sizes.is_empty());
     }
 }
