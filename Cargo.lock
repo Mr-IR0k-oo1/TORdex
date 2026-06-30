@@ -3843,11 +3843,26 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 1.0.69",
+ "time",
  "tordex-algorithms",
  "tordex-core",
  "tordex-knowledge",
+ "tordex-temporal-graph",
  "tordex-types",
  "zip",
+]
+
+[[package]]
+name = "tordex-temporal-graph"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tordex-core",
+ "tordex-knowledge",
+ "tordex-types",
 ]
 
 [[package]]

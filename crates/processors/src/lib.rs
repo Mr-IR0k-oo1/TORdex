@@ -22,6 +22,7 @@ pub mod processing_fabric;
 pub mod repositories;
 pub mod set_theory;
 pub mod temporal_algebra;
+pub mod temporal_graph_processor;
 pub mod vector_spaces;
 pub mod video;
 
@@ -49,6 +50,7 @@ pub use processing_fabric::ProcessingFabric;
 pub use repositories::RepositoryProcessor;
 pub use set_theory::SetTheoryProcessor;
 pub use temporal_algebra::TemporalAlgebraProcessor;
+pub use temporal_graph_processor::TemporalGraphProcessor;
 pub use vector_spaces::VectorSpaceProcessor;
 pub use video::VideoProcessor;
 
@@ -81,6 +83,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(InformationTheoryProcessor::new()),
         Box::new(VectorSpaceProcessor::new()),
         Box::new(TemporalAlgebraProcessor::new()),
+        Box::new(TemporalGraphProcessor::new()),
     ];
     for proc in processors {
         let _ = registry.register(proc);

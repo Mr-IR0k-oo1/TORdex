@@ -14,6 +14,8 @@ tordex-core = { workspace = true }
 tordex-types = { workspace = true }
 tordex-algorithms = { workspace = true }
 tordex-knowledge = { workspace = true }
+tordex-temporal-graph = { workspace = true }
+time = { workspace = true }
 
 serde = { workspace = true }
 serde_json = { workspace = true }
