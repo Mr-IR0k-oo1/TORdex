@@ -15,6 +15,7 @@ members = [
     "crates/repo-intel",
     "crates/package-intel",
     "crates/search",
+    "crates/ai-runtime",
     "evidence/evidence-store",
     "services/api",
 ]
@@ -42,6 +43,7 @@ tordex-temporal-graph = { path = "crates/temporal-graph" }
 tordex-repo-intel = { path = "crates/repo-intel" }
 tordex-package-intel = { path = "crates/package-intel" }
 tordex-search = { path = "crates/search" }
+tordex-ai-runtime = { path = "crates/ai-runtime" }
 tordex-evidence = { path = "evidence/evidence-store" }
 
 # Async runtime
@@ -87,6 +89,7 @@ image = "0.25"
 
 # Misc
 async-trait = "0.1"
+regex = "1"
 bytes = "1"
 http = "1"
 url = "2"

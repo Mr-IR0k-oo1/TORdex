@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+pub mod ai_runtime_processor;
 pub mod algorithm_engine;
 pub mod ast;
 pub mod binary;
@@ -31,6 +32,7 @@ pub mod video;
 
 use tordex_core::processor::ProcessorRegistry;
 
+pub use ai_runtime_processor::AiRuntimeProcessor;
 pub use algorithm_engine::AlgorithmEngine;
 pub use ast::AstProcessor;
 pub use binary::BinaryProcessor;
@@ -80,6 +82,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(NetworkProcessor::new()),
         Box::new(BinaryProcessor::new()),
         Box::new(DecompilerProcessor::new()),
+        Box::new(AiRuntimeProcessor::new()),
         Box::new(AlgorithmEngine::new()),
         Box::new(GraphTheoryProcessor::new()),
         Box::new(ProbabilityProcessor::new()),
