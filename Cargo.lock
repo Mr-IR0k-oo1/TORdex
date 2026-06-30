@@ -3716,6 +3716,8 @@ dependencies = [
  "tordex-config",
  "tordex-core",
  "tordex-evidence",
+ "tordex-processors",
+ "tordex-repo-intel",
  "tordex-types",
  "tower 0.4.13",
  "tower-http",
@@ -3847,9 +3849,22 @@ dependencies = [
  "tordex-algorithms",
  "tordex-core",
  "tordex-knowledge",
+ "tordex-repo-intel",
  "tordex-temporal-graph",
  "tordex-types",
  "zip",
+]
+
+[[package]]
+name = "tordex-repo-intel"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tordex-core",
+ "tordex-types",
 ]
 
 [[package]]

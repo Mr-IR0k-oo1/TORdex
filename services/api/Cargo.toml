@@ -14,6 +14,8 @@ tordex-core = { workspace = true }
 tordex-config = { workspace = true }
 tordex-types = { workspace = true }
 tordex-evidence = { workspace = true }
+tordex-processors = { workspace = true }
+tordex-repo-intel = { workspace = true }
 
 axum = { workspace = true }
 tokio = { workspace = true }

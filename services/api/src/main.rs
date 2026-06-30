@@ -9,6 +9,7 @@ use tracing::info;
 use tordex_api::build_app;
 use tordex_api::AppState;
 use tordex_config::AppConfig;
+use tordex_core::processor::InMemoryProcessorRegistry;
 use tordex_evidence::MinioArtifactStore;
 use tordex_types::ArtifactStore;
 
@@ -52,7 +53,14 @@ async fn main() -> Result<()> {
         .context("connecting to MinIO")?,
     );
 
-    let state = AppState { pool, store };
+    let registry = Arc::new(InMemoryProcessorRegistry::new());
+    tordex_processors::register_all(&*registry);
+
+    let state = AppState {
+        pool,
+        store,
+        registry,
+    };
     let app = build_app(state);
 
     let addr: SocketAddr = config

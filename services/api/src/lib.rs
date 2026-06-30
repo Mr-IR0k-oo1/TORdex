@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use axum::extract::State;
@@ -10,12 +11,14 @@ use sha2::Digest;
 use tower_http::trace::TraceLayer;
 use tracing::info;
 
+use tordex_core::processor::ProcessorRegistry;
 use tordex_types::ArtifactStore;
 
 #[derive(Clone)]
 pub struct AppState {
     pub pool: sqlx::PgPool,
     pub store: Arc<dyn ArtifactStore>,
+    pub registry: Arc<dyn ProcessorRegistry>,
 }
 
 #[derive(Deserialize)]
@@ -30,6 +33,10 @@ pub fn build_app(state: AppState) -> Router {
         .route("/artifacts", get(artifacts_handler))
         .route("/events", get(events_handler))
         .route("/health", get(health_handler))
+        .route("/processors", get(processors_handler))
+        .route("/process", post(process_handler))
+        .route("/intel/analyze", post(intel_analyze_handler))
+        .route("/intel/report", get(intel_report_handler))
         .layer(TraceLayer::new_for_http())
         .with_state(state)
 }
@@ -305,6 +312,166 @@ async fn health_handler() -> impl IntoResponse {
     )
 }
 
+// ─── GET /processors ─────────────────────────────────────────────────────────
+
+async fn processors_handler(
+    State(state): State<AppState>,
+) -> Json<serde_json::Value> {
+    let names = state.registry.list();
+    let mut processors = Vec::new();
+    for name in &names {
+        if let Some(p) = state.registry.get(name) {
+            processors.push(serde_json::json!({
+                "name": p.name(),
+                "description": p.description(),
+                "content_types": p.content_types(),
+            }));
+        }
+    }
+    Json(serde_json::json!({ "processors": processors }))
+}
+
+// ─── POST /process ───────────────────────────────────────────────────────────
+
+#[derive(Deserialize)]
+struct ProcessRequest {
+    content_type: Option<String>,
+    data: serde_json::Value,
+    metadata: Option<HashMap<String, String>>,
+    processor: Option<String>,
+}
+
+async fn process_handler(
+    State(state): State<AppState>,
+    Json(req): Json<ProcessRequest>,
+) -> Result<Json<serde_json::Value>, ApiError> {
+    let id = ulid::Ulid::new().to_string();
+    let data_bytes = serde_json::to_vec(&req.data)
+        .map_err(|e| ApiError::Internal(format!("serialization error: {e}")))?;
+    let metadata = req.metadata.unwrap_or_default();
+
+    let results = if let Some(processor_name) = &req.processor {
+        // Route to specific processor
+        let p = state
+            .registry
+            .get(processor_name)
+            .ok_or_else(|| ApiError::Internal(format!("processor not found: {processor_name}")))?;
+        p.process(&id, &data_bytes, req.content_type.as_deref(), metadata)
+            .map_err(|e| ApiError::Internal(format!("processing error: {e}")))?
+    } else {
+        // Route by content type
+        state
+            .registry
+            .process(&id, &data_bytes, req.content_type.as_deref(), metadata)
+    };
+
+    let observations: Vec<serde_json::Value> = results
+        .into_iter()
+        .map(|obs| {
+            let data: serde_json::Value =
+                serde_json::from_slice(&obs.data).unwrap_or(serde_json::Value::Null);
+            serde_json::json!({
+                "id": obs.id,
+                "kind": obs.kind,
+                "data": data,
+                "content_type": obs.content_type,
+                "metadata": obs.metadata,
+            })
+        })
+        .collect();
+
+    Ok(Json(serde_json::json!({ "observations": observations })))
+}
+
+// ─── POST /intel/analyze ─────────────────────────────────────────────────────
+
+#[derive(Deserialize)]
+struct IntelAnalyzeRequest {
+    path: String,
+    content: String,
+    action: Option<String>,
+}
+
+async fn intel_analyze_handler(
+    State(state): State<AppState>,
+    Json(req): Json<IntelAnalyzeRequest>,
+) -> Result<Json<serde_json::Value>, ApiError> {
+    let id = ulid::Ulid::new().to_string();
+    let data = serde_json::json!({
+        "path": req.path,
+        "content": req.content,
+    });
+    let data_bytes = serde_json::to_vec(&data)
+        .map_err(|e| ApiError::Internal(format!("serialization error: {e}")))?;
+    let mut metadata = HashMap::new();
+    metadata.insert(
+        "action".to_string(),
+        req.action.unwrap_or_else(|| "analyze_file".to_string()),
+    );
+
+    let p = state
+        .registry
+        .get("RepoIntelProcessor")
+        .ok_or_else(|| ApiError::Internal("RepoIntelProcessor not registered".to_string()))?;
+    let results = p
+        .process(&id, &data_bytes, Some("application/x-repo-intel"), metadata)
+        .map_err(|e| ApiError::Internal(format!("processing error: {e}")))?;
+
+    let observations: Vec<serde_json::Value> = results
+        .into_iter()
+        .map(|obs| {
+            let data: serde_json::Value =
+                serde_json::from_slice(&obs.data).unwrap_or(serde_json::Value::Null);
+            serde_json::json!({
+                "id": obs.id,
+                "kind": obs.kind,
+                "data": data,
+                "content_type": obs.content_type,
+                "metadata": obs.metadata,
+            })
+        })
+        .collect();
+
+    Ok(Json(serde_json::json!({ "observations": observations })))
+}
+
+// ─── GET /intel/report ───────────────────────────────────────────────────────
+
+async fn intel_report_handler(
+    State(state): State<AppState>,
+) -> Result<Json<serde_json::Value>, ApiError> {
+    let id = ulid::Ulid::new().to_string();
+    let p = state
+        .registry
+        .get("RepoIntelProcessor")
+        .ok_or_else(|| ApiError::Internal("RepoIntelProcessor not registered".to_string()))?;
+    let results = p
+        .process(
+            &id,
+            b"{}",
+            Some("application/x-repo-intel"),
+            HashMap::from([("action".into(), "report".into())]),
+        )
+        .map_err(|e| ApiError::Internal(format!("processing error: {e}")))?;
+
+    let observations: Vec<serde_json::Value> = results
+        .into_iter()
+        .map(|obs| {
+            let data: serde_json::Value =
+                serde_json::from_slice(&obs.data).unwrap_or(serde_json::Value::Null);
+            serde_json::json!({
+                "id": obs.id,
+                "kind": obs.kind,
+                "data": data,
+                "content_type": obs.content_type,
+                "metadata": obs.metadata,
+            })
+        })
+        .collect();
+
+    Ok(Json(serde_json::json!({ "observations": observations })))
+}
+
 // ─── Errors ──────────────────────────────────────────────────────────────────
 
 enum ApiError {
@@ -383,7 +550,11 @@ mod tests {
         let store = try_store()
             .await
             .unwrap_or_else(|| panic!("MinIO not available at {}", minio_config().0));
-        let app = build_app(AppState { pool, store });
+        let app = build_app(AppState {
+            pool,
+            store,
+            registry: Arc::new(InMemoryProcessorRegistry::new()),
+        });
 
         let response = app
             .oneshot(Request::builder().uri("/health").body(Body::empty()).unwrap())
@@ -411,7 +582,11 @@ mod tests {
         let store = try_store()
             .await
             .unwrap_or_else(|| panic!("MinIO not available at {}", minio_config().0));
-        let app = build_app(AppState { pool, store });
+        let app = build_app(AppState {
+            pool,
+            store,
+            registry: Arc::new(InMemoryProcessorRegistry::new()),
+        });
 
         let response = app
             .oneshot(Request::builder().uri("/services").body(Body::empty()).unwrap())

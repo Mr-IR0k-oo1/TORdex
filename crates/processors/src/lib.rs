@@ -19,6 +19,7 @@ pub mod optimization;
 pub mod pdf;
 pub mod probability;
 pub mod processing_fabric;
+pub mod repo_intel_processor;
 pub mod repositories;
 pub mod set_theory;
 pub mod temporal_algebra;
@@ -47,6 +48,7 @@ pub use optimization::OptimizationProcessor;
 pub use pdf::PdfProcessor;
 pub use probability::ProbabilityProcessor;
 pub use processing_fabric::ProcessingFabric;
+pub use repo_intel_processor::RepoIntelProcessor;
 pub use repositories::RepositoryProcessor;
 pub use set_theory::SetTheoryProcessor;
 pub use temporal_algebra::TemporalAlgebraProcessor;
@@ -84,6 +86,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(VectorSpaceProcessor::new()),
         Box::new(TemporalAlgebraProcessor::new()),
         Box::new(TemporalGraphProcessor::new()),
+        Box::new(RepoIntelProcessor::new()),
     ];
     for proc in processors {
         let _ = registry.register(proc);
