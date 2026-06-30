@@ -1,14 +1,35 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/tordex-core",
-    "crates/tordex-events",
-    "crates/tordex-sources",
-    "crates/tordex-collection",
-    "crates/tordex-sessions",
-    "crates/tordex-evidence",
-    "crates/tordex-event-platform",
-    "crates/tordex-bin",
+    # Core crates
+    "crates/core",
+    "crates/config",
+    "crates/types",
+    "crates/events",
+    "crates/policy",
+    "crates/plugins",
+    "crates/errors",
+
+    # Source / data
+    "crates/source-registry",
+
+    # Services
+    "services/api",
+    "services/worker",
+    "services/scheduler",
+    "services/scheduler/sessions",
+    "services/cli",
+
+    # Collectors
+    "collectors/http",
+    "collectors/tor",
+    "collectors/git",
+    "collectors/rss",
+    "collectors/filesystem",
+
+    # Evidence & Knowledge
+    "evidence/evidence-store",
+    "knowledge/event-platform",
 ]
 
 [workspace.package]
@@ -20,13 +41,26 @@ publish = false
 
 [workspace.dependencies]
 # Internal crates
-tordex-core = { path = "crates/tordex-core" }
-tordex-events = { path = "crates/tordex-events" }
-tordex-sources = { path = "crates/tordex-sources" }
-tordex-collection = { path = "crates/tordex-collection" }
-tordex-sessions = { path = "crates/tordex-sessions" }
-tordex-evidence = { path = "crates/tordex-evidence" }
-tordex-event-platform = { path = "crates/tordex-event-platform" }
+tordex-core = { path = "crates/core" }
+tordex-config = { path = "crates/config" }
+tordex-types = { path = "crates/types" }
+tordex-events = { path = "crates/events" }
+tordex-policy = { path = "crates/policy" }
+tordex-plugins = { path = "crates/plugins" }
+tordex-errors = { path = "crates/errors" }
+tordex-sources = { path = "crates/source-registry" }
+tordex-collection = { path = "services/scheduler" }
+tordex-sessions = { path = "services/scheduler/sessions" }
+tordex-evidence = { path = "evidence/evidence-store" }
+tordex-event-platform = { path = "knowledge/event-platform" }
+tordex-api = { path = "services/api" }
+tordex-worker = { path = "services/worker" }
+tordex-cli = { path = "services/cli" }
+tordex-http-collector = { path = "collectors/http" }
+tordex-tor-collector = { path = "collectors/tor" }
+tordex-git-collector = { path = "collectors/git" }
+tordex-rss-collector = { path = "collectors/rss" }
+tordex-filesystem-collector = { path = "collectors/filesystem" }
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }
