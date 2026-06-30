@@ -3865,6 +3865,7 @@ dependencies = [
  "tordex-knowledge",
  "tordex-package-intel",
  "tordex-repo-intel",
+ "tordex-search",
  "tordex-temporal-graph",
  "tordex-types",
  "zip",
@@ -3878,6 +3879,21 @@ dependencies = [
  "serde_json",
  "thiserror 1.0.69",
  "time",
+ "tordex-core",
+ "tordex-types",
+]
+
+[[package]]
+name = "tordex-search"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 1.0.69",
+ "time",
+ "tordex-algorithms",
  "tordex-core",
  "tordex-types",
 ]

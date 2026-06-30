@@ -22,6 +22,7 @@ pub mod probability;
 pub mod processing_fabric;
 pub mod repo_intel_processor;
 pub mod repositories;
+pub mod search_processor;
 pub mod set_theory;
 pub mod temporal_algebra;
 pub mod temporal_graph_processor;
@@ -52,6 +53,7 @@ pub use probability::ProbabilityProcessor;
 pub use processing_fabric::ProcessingFabric;
 pub use repo_intel_processor::RepoIntelProcessor;
 pub use repositories::RepositoryProcessor;
+pub use search_processor::SearchProcessor;
 pub use set_theory::SetTheoryProcessor;
 pub use temporal_algebra::TemporalAlgebraProcessor;
 pub use temporal_graph_processor::TemporalGraphProcessor;
@@ -90,6 +92,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(TemporalGraphProcessor::new()),
         Box::new(RepoIntelProcessor::new()),
         Box::new(PackageIntelProcessor::new()),
+        Box::new(SearchProcessor::new()),
     ];
     for proc in processors {
         let _ = registry.register(proc);

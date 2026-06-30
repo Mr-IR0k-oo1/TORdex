@@ -14,6 +14,7 @@ members = [
     "crates/temporal-graph",
     "crates/repo-intel",
     "crates/package-intel",
+    "crates/search",
     "evidence/evidence-store",
     "services/api",
 ]
@@ -40,6 +41,7 @@ tordex-knowledge = { path = "crates/knowledge" }
 tordex-temporal-graph = { path = "crates/temporal-graph" }
 tordex-repo-intel = { path = "crates/repo-intel" }
 tordex-package-intel = { path = "crates/package-intel" }
+tordex-search = { path = "crates/search" }
 tordex-evidence = { path = "evidence/evidence-store" }
 
 # Async runtime

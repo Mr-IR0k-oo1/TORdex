@@ -17,6 +17,7 @@ tordex-knowledge = { workspace = true }
 tordex-temporal-graph = { workspace = true }
 tordex-repo-intel = { workspace = true }
 tordex-package-intel = { workspace = true }
+tordex-search = { workspace = true }
 time = { workspace = true }
 
 serde = { workspace = true }
