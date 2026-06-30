@@ -1,0 +1,29 @@
+[package]
+name = "tordex-processors"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tordex-core = { workspace = true }
+
+serde = { workspace = true }
+serde_json = { workspace = true }
+scraper = { workspace = true }
+pulldown-cmark = { workspace = true }
+lopdf = { workspace = true, optional = true }
+zip = { workspace = true, optional = true }
+quick-xml = { workspace = true, optional = true }
+image = { workspace = true, optional = true }
+thiserror = { workspace = true }
+
+[features]
+default = ["pdf", "office", "images"]
+pdf = ["lopdf"]
+office = ["zip", "quick-xml"]
+images = ["image"]

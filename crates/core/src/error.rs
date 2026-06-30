@@ -30,3 +30,26 @@ impl CoreError {
         Self::Serialization(msg.into())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn config_error() {
+        let err = CoreError::config("missing key");
+        assert_eq!(err.to_string(), "configuration error: missing key");
+    }
+
+    #[test]
+    fn infra_error() {
+        let err = CoreError::infra("connection refused");
+        assert_eq!(err.to_string(), "infrastructure error: connection refused");
+    }
+
+    #[test]
+    fn serialization_error() {
+        let err = CoreError::serialization("invalid format");
+        assert_eq!(err.to_string(), "serialization error: invalid format");
+    }
+}

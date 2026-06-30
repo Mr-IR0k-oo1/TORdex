@@ -1,5 +1,5 @@
 [package]
-name = "tordex-core"
+name = "tordex-vifs"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -10,8 +10,11 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
-ulid = { workspace = true }
-time = { workspace = true }
+tordex-core = { workspace = true }
+tordex-types = { workspace = true }
+
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
+ulid = { workspace = true }
+time = { workspace = true }

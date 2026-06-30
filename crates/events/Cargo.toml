@@ -15,7 +15,7 @@ tordex-core = { workspace = true }
 tokio = { workspace = true }
 async-trait = { workspace = true }
 futures = { workspace = true }
-futures-util = { workspace = true }
+futures-util = "0.3"
 async-stream = "0.3"
 tokio-stream = "0.1"
 tokio-util = { workspace = true }

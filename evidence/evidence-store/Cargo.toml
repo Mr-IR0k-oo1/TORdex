@@ -11,3 +11,15 @@ workspace = true
 
 [dependencies]
 tordex-core = { workspace = true }
+tordex-types = { workspace = true }
+
+s3 = { workspace = true }
+tokio = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+bytes = { workspace = true }
+
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

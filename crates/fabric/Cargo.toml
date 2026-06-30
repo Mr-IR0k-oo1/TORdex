@@ -1,5 +1,5 @@
 [package]
-name = "tordex-types"
+name = "tordex-fabric"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,20 +9,18 @@ publish.workspace = true
 [lints]
 workspace = true
 
-[features]
-default = []
-browser = []
-
 [dependencies]
 tordex-core = { workspace = true }
+tordex-types = { workspace = true }
+tordex-drivers = { workspace = true }
 
+tokio = { workspace = true }
 ulid = { workspace = true }
-tokio-util = { workspace = true }
-async-trait = { workspace = true }
-bytes = { workspace = true }
-http = { workspace = true }
-
 serde = { workspace = true }
 serde_json = { workspace = true }
 time = { workspace = true }
+tracing = { workspace = true }
 thiserror = { workspace = true }
+
+[dev-dependencies]
+url = { workspace = true }

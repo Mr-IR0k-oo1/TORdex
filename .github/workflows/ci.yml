@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup component add clippy rust-src
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: cargo check
+        run: cargo check --workspace --all-targets
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup component add clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: cargo clippy
+        run: cargo clippy --workspace --all-targets
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: cargo test (unit tests only)
+        run: cargo test --workspace --exclude tordex-api
+
+  integration-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: tordex
+          POSTGRES_PASSWORD: tordex
+          POSTGRES_DB: tordex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      minio:
+        image: minio/minio:latest
+        env:
+          MINIO_ROOT_USER: tordex
+          MINIO_ROOT_PASSWORD: tordex-secret
+        ports:
+          - 9000:9000
+          - 9001:9001
+        options: >-
+          --health-cmd "curl -f http://localhost:9000/minio/health/live || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Create MinIO bucket
+        run: |
+          sleep 5
+          apt-get update && apt-get install -y curl
+          curl -X PUT http://localhost:9000/tordex-evidence \
+            -H "Authorization: Bearer $(echo -n 'tordex:tordex-secret' | base64)"
+
+      - name: Run migrations
+        run: cargo run --bin tordex-api &
+        env:
+          TORDEX_HTTP_BIND: 127.0.0.1:0
+          DATABASE_URL: postgres://tordex:tordex@localhost:5432/tordex
+          MINIO_ENDPOINT: http://localhost:9000
+          MINIO_ACCESS_KEY: tordex
+          MINIO_SECRET_KEY: tordex-secret
+      - run: cargo test -p tordex-api
+        env:
+          DATABASE_URL: postgres://tordex:tordex@localhost:5432/tordex
+          MINIO_ENDPOINT: http://localhost:9000
+          MINIO_ACCESS_KEY: tordex
+          MINIO_SECRET_KEY: tordex-secret
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup component add rustfmt
+
+      - name: cargo fmt
+        run: cargo fmt --all --check
