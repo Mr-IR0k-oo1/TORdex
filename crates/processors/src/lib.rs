@@ -10,6 +10,7 @@ pub mod graph_theory;
 pub mod html;
 pub mod images;
 pub mod information_theory;
+pub mod knowledge_processor;
 pub mod markdown;
 pub mod network;
 pub mod ocr;
@@ -36,6 +37,7 @@ pub use graph_theory::GraphTheoryProcessor;
 pub use html::HtmlProcessor;
 pub use images::ImageProcessor;
 pub use information_theory::InformationTheoryProcessor;
+pub use knowledge_processor::KnowledgeProcessor;
 pub use markdown::MarkdownProcessor;
 pub use network::NetworkProcessor;
 pub use ocr::OcrProcessor;
@@ -57,6 +59,7 @@ pub use video::VideoProcessor;
 pub fn register_all(registry: &dyn ProcessorRegistry) {
     let processors: Vec<Box<dyn tordex_core::processor::Processor>> = vec![
         Box::new(HtmlProcessor::new()),
+        Box::new(KnowledgeProcessor::new()),
         Box::new(MarkdownProcessor::new()),
         Box::new(PdfProcessor::new()),
         Box::new(OfficeProcessor::new()),
