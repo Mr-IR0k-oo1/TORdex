@@ -3688,6 +3688,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-algorithms"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "tordex-api"
 version = "0.1.0"
 dependencies = [
@@ -3818,6 +3829,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 1.0.69",
+ "tordex-algorithms",
  "tordex-core",
  "zip",
 ]

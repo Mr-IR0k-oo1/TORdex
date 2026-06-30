@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+pub mod algorithm_engine;
 pub mod ast;
 pub mod binary;
 pub mod category_theory;
@@ -25,6 +26,7 @@ pub mod video;
 
 use tordex_core::processor::ProcessorRegistry;
 
+pub use algorithm_engine::AlgorithmEngine;
 pub use ast::AstProcessor;
 pub use binary::BinaryProcessor;
 pub use category_theory::CategoryTheoryProcessor;
@@ -67,6 +69,7 @@ pub fn register_all(registry: &dyn ProcessorRegistry) {
         Box::new(NetworkProcessor::new()),
         Box::new(BinaryProcessor::new()),
         Box::new(DecompilerProcessor::new()),
+        Box::new(AlgorithmEngine::new()),
         Box::new(GraphTheoryProcessor::new()),
         Box::new(ProbabilityProcessor::new()),
         Box::new(SetTheoryProcessor::new()),
