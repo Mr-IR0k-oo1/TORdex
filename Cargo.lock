@@ -3766,6 +3766,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-apps"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "tordex-agents",
+ "tordex-config",
+ "tordex-core",
+ "tordex-decision",
+ "tordex-drivers",
+ "tordex-monitoring",
+ "tracing",
+]
+
+[[package]]
 name = "tordex-config"
 version = "0.1.0"
 dependencies = [

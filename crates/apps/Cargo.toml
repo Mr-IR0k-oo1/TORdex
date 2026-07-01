@@ -1,0 +1,20 @@
+[package]
+name = "tordex-apps"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tordex-core = { workspace = true }
+tordex-agents = { workspace = true }
+tordex-monitoring = { workspace = true }
+tordex-drivers = { workspace = true }
+tordex-decision = { workspace = true }
+tordex-config = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+
+[lints]
+workspace = true
