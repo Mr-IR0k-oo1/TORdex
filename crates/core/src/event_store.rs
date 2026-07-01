@@ -221,6 +221,17 @@ pub enum SystemEvent {
         status: String,
         timestamp: OffsetDateTime,
     },
+
+    // ── Monitoring ──────────────────────────────────────────────────────────
+    MonitoringChangeDetected {
+        id: String,
+        watcher_kind: String,
+        subject: String,
+        change_type: String,
+        previous_state: Option<serde_json::Value>,
+        current_state: serde_json::Value,
+        detected_at: OffsetDateTime,
+    },
 }
 
 impl SystemEvent {
@@ -250,6 +261,7 @@ impl SystemEvent {
             Self::AgentStarted { .. }
             | Self::AgentStopped { .. }
             | Self::AgentHeartbeat { .. } => "Agent",
+            Self::MonitoringChangeDetected { .. } => "Monitoring",
         }
     }
 
@@ -281,6 +293,7 @@ impl SystemEvent {
             Self::AgentStarted { .. } => "Started",
             Self::AgentStopped { .. } => "Stopped",
             Self::AgentHeartbeat { .. } => "Heartbeat",
+            Self::MonitoringChangeDetected { .. } => "ChangeDetected",
         }
     }
 
@@ -309,6 +322,7 @@ impl SystemEvent {
             Self::AgentStarted { id, .. }
             | Self::AgentStopped { id, .. }
             | Self::AgentHeartbeat { id, .. } => id,
+            Self::MonitoringChangeDetected { id, .. } => id,
         }
     }
 

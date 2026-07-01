@@ -1,6 +1,19 @@
 //! Cross-cutting error type.
 
+use crate::event_store::EventStoreError;
 use thiserror::Error;
+
+impl From<EventStoreError> for CoreError {
+    fn from(e: EventStoreError) -> Self {
+        Self::infra(e.to_string())
+    }
+}
+
+impl From<crate::driver::DriverError> for CoreError {
+    fn from(e: crate::driver::DriverError) -> Self {
+        Self::infra(e.to_string())
+    }
+}
 
 #[derive(Debug, Error)]
 pub enum CoreError {

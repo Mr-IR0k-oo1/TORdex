@@ -870,6 +870,29 @@ impl VirtualIntelligenceFilesystem {
                 );
                 self.write(&path, &serde_json::to_vec(&record).unwrap())?;
             }
+
+            SystemEvent::MonitoringChangeDetected {
+                id,
+                watcher_kind,
+                subject,
+                change_type,
+                previous_state: _,
+                current_state,
+                detected_at,
+            } => {
+                let record = serde_json::json!({
+                    "id": id,
+                    "watcher_kind": watcher_kind,
+                    "subject": subject,
+                    "change_type": change_type,
+                    "current_state": current_state,
+                    "detected_at": detected_at.to_string(),
+                });
+                let path = VifsPath::from(
+                    &format!("/monitoring/changes/{id}") as &str,
+                );
+                self.write(&path, &serde_json::to_vec(&record).unwrap())?;
+            }
         }
         Ok(())
     }

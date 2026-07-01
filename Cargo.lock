@@ -3873,6 +3873,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-monitoring"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "time",
+ "tordex-core",
+ "tracing",
+ "ulid",
+]
+
+[[package]]
 name = "tordex-package-intel"
 version = "0.1.0"
 dependencies = [
