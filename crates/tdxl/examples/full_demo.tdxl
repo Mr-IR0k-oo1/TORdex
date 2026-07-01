@@ -1,0 +1,22 @@
+# ─── Full TDXL Demo ──────────────────────────────────────────────────────
+
+# Pipeline 1: Deep onion service discovery
+FROM OnionServices
+MATCH Technology == "WordPress"
+WHERE Status == Alive
+TRAVERSE LINKS_TO DEPTH 3
+SUMMARIZE
+
+# Pipeline 2: Threat actor correlation
+FROM ThreatActors
+MATCH Group == "APT29"
+TIMELINE FROM "2024-01-01"
+CORRELATE WITH Campaigns
+EXPORT json
+
+# Pipeline 3: Intelligence inference
+FROM ExploitDB
+SIMILAR TO "ransomware"
+INFER zero_day_indicators
+CLASSIFY AS critical
+STORE AS intel_report

@@ -1,0 +1,27 @@
+[package]
+name = "tordex-memory"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+tordex-core = { workspace = true }
+tordex-types = { workspace = true }
+tordex-events = { workspace = true }
+tordex-knowledge = { workspace = true }
+tordex-temporal-graph = { workspace = true }
+tordex-agents = { workspace = true }
+tordex-search = { workspace = true }
+
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+redis = { workspace = true }
+ulid = { workspace = true }
+time = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }

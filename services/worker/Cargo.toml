@@ -1,0 +1,30 @@
+[package]
+name = "tordex-worker"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+tordex-core = { workspace = true }
+tordex-cluster = { path = "../../crates/cluster" }
+tordex-ai-runtime = { workspace = true }
+tordex-temporal-graph = { workspace = true }
+tordex-search = { workspace = true }
+tordex-knowledge = { workspace = true }
+tordex-types = { workspace = true }
+tordex-drivers = { workspace = true }
+tordex-fabric = { workspace = true }
+tordex-processors = { workspace = true }
+
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+redis = { workspace = true }
+ulid = { workspace = true }
+time = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }

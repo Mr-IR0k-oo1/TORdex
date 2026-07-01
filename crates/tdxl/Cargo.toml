@@ -1,0 +1,14 @@
+[package]
+name = "tordex-tdxl"
+version = "0.1.0"
+edition = "2021"
+description = "TORdex Data eXploration Language — compiles to intelligence VM bytecode"
+
+[dependencies]
+tordex-vm = { path = "../vm" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+
+[dev-dependencies]
+tordex-vm = { path = "../vm" }

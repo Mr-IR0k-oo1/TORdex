@@ -1,0 +1,36 @@
+# ─── TORdex Data eXploration Language ──────────────────────────────────────
+# Phase 25: Intelligence Programming Language
+# Example: Find WordPress onion services with deep traversal
+
+FROM OnionServices
+MATCH Technology == "WordPress"
+WHERE Status == Alive
+TRAVERSE LINKS_TO DEPTH 3
+SUMMARIZE
+
+# ─── More examples ─────────────────────────────────────────────────────────
+
+# Classify content and store results
+FROM DarkWebMarkets
+MATCH Category == "Drugs"
+CLASSIFY AS high_risk
+STORE AS drug_markets
+
+# Timeline and correlation analysis
+FROM ThreatActors
+MATCH Group == "APT29"
+TIMELINE FROM "2024-01-01" TO "2024-12-31"
+CORRELATE WITH Campaigns
+
+# Inference and similarity search
+FROM ExploitDB
+MATCH CVE == "CVE-2024-*"
+INFER zero_day_indicators
+SIMILAR TO "ransomware"
+EXPORT json
+
+# Sort and limit results
+FROM RansomwareBlogs
+MATCH Status == Active
+SORT BY LastSeen DESC
+LIMIT 10

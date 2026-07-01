@@ -20,8 +20,16 @@ members = [
     "crates/monitoring",
     "crates/decision",
     "crates/apps",
+    "crates/cluster",
+    "crates/memory",
+    "crates/vm",
+    "crates/tdxl",
+    "crates/ule",
+    "crates/gpu",
     "evidence/evidence-store",
     "services/api",
+    "services/kernel",
+    "services/worker",
 ]
 
 [workspace.package]
@@ -52,6 +60,11 @@ tordex-agents = { path = "crates/agents" }
 tordex-monitoring = { path = "crates/monitoring" }
 tordex-decision = { path = "crates/decision" }
 tordex-apps = { path = "crates/apps" }
+tordex-cluster = { path = "crates/cluster" }
+tordex-memory = { path = "crates/memory" }
+tordex-vm = { path = "crates/vm" }
+tordex-tdxl = { path = "crates/tdxl" }
+tordex-gpu = { path = "crates/gpu" }
 tordex-evidence = { path = "evidence/evidence-store" }
 
 # Async runtime
@@ -60,7 +73,7 @@ tokio-util = { version = "0.7", features = ["rt"] }
 futures = "0.3"
 
 # HTTP / API
-axum = { version = "0.7", features = ["macros"] }
+axum = { version = "0.7", features = ["macros", "ws"] }
 tower-http = { version = "0.6", features = ["trace", "cors"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "gzip", "brotli", "json"] }
 

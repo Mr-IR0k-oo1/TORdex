@@ -257,6 +257,7 @@ dependencies = [
  "async-trait",
  "axum-core",
  "axum-macros",
+ "base64",
  "bytes",
  "futures-util",
  "http",
@@ -275,8 +276,10 @@ dependencies = [
  "serde_json",
  "serde_path_to_error",
  "serde_urlencoded",
+ "sha1",
  "sync_wrapper",
  "tokio",
+ "tokio-tungstenite",
  "tower 0.5.3",
  "tower-layer",
  "tower-service",
@@ -714,6 +717,12 @@ dependencies = [
  "quote",
  "syn",
 ]
+
+[[package]]
+name = "data-encoding"
+version = "2.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4ae5f15dda3c708c0ade84bfee31ccab44a3da4f88015ed22f63732abe300c8"
 
 [[package]]
 name = "deflate64"
@@ -3686,6 +3695,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-tungstenite"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "edc5f74e248dc973e0dbb7b74c7e0d6fcc301c694ff50049504004ef4d0cdcd9"
+dependencies = [
+ "futures-util",
+ "log",
+ "tokio",
+ "tungstenite",
+]
+
+[[package]]
 name = "tokio-util"
 version = "0.7.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3778,6 +3799,23 @@ dependencies = [
  "tordex-drivers",
  "tordex-monitoring",
  "tracing",
+]
+
+[[package]]
+name = "tordex-cluster"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "futures",
+ "redis",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tokio",
+ "tordex-core",
+ "tracing",
+ "ulid",
 ]
 
 [[package]]
@@ -3886,6 +3924,74 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-gpu"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tracing",
+]
+
+[[package]]
+name = "tordex-kernel"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "axum",
+ "bytes",
+ "futures",
+ "hex",
+ "http",
+ "image",
+ "lopdf",
+ "pulldown-cmark",
+ "quick-xml 0.37.5",
+ "redis",
+ "regex",
+ "reqwest",
+ "s3",
+ "scraper",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "sqlx",
+ "thiserror 1.0.69",
+ "time",
+ "tokio",
+ "tokio-util",
+ "tordex-agents",
+ "tordex-ai-runtime",
+ "tordex-algorithms",
+ "tordex-apps",
+ "tordex-cluster",
+ "tordex-config",
+ "tordex-core",
+ "tordex-decision",
+ "tordex-drivers",
+ "tordex-events",
+ "tordex-evidence",
+ "tordex-fabric",
+ "tordex-knowledge",
+ "tordex-monitoring",
+ "tordex-package-intel",
+ "tordex-processors",
+ "tordex-repo-intel",
+ "tordex-search",
+ "tordex-temporal-graph",
+ "tordex-types",
+ "tordex-vifs",
+ "tower 0.4.13",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "ulid",
+ "url",
+ "zip",
+]
+
+[[package]]
 name = "tordex-knowledge"
 version = "0.1.0"
 dependencies = [
@@ -3897,6 +4003,29 @@ dependencies = [
  "time",
  "tordex-core",
  "tordex-types",
+]
+
+[[package]]
+name = "tordex-memory"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "futures",
+ "redis",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tokio",
+ "tordex-agents",
+ "tordex-core",
+ "tordex-events",
+ "tordex-knowledge",
+ "tordex-search",
+ "tordex-temporal-graph",
+ "tordex-types",
+ "tracing",
+ "ulid",
 ]
 
 [[package]]
@@ -3978,6 +4107,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-tdxl"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tordex-vm",
+]
+
+[[package]]
 name = "tordex-temporal-graph"
 version = "0.1.0"
 dependencies = [
@@ -4007,6 +4146,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-ule"
+version = "0.1.0"
+dependencies = [
+ "regex",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tordex-tdxl",
+]
+
+[[package]]
 name = "tordex-vifs"
 version = "0.1.0"
 dependencies = [
@@ -4016,6 +4165,51 @@ dependencies = [
  "time",
  "tordex-core",
  "tordex-types",
+ "ulid",
+]
+
+[[package]]
+name = "tordex-vm"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tordex-core",
+ "tordex-events",
+ "tordex-gpu",
+ "tordex-knowledge",
+ "tordex-memory",
+ "tordex-search",
+ "tordex-types",
+ "tracing",
+ "ulid",
+]
+
+[[package]]
+name = "tordex-worker"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "redis",
+ "serde",
+ "serde_json",
+ "time",
+ "tokio",
+ "tordex-ai-runtime",
+ "tordex-cluster",
+ "tordex-core",
+ "tordex-drivers",
+ "tordex-fabric",
+ "tordex-knowledge",
+ "tordex-processors",
+ "tordex-search",
+ "tordex-temporal-graph",
+ "tordex-types",
+ "tracing",
+ "tracing-subscriber",
  "ulid",
 ]
 
@@ -4153,6 +4347,24 @@ name = "try-lock"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
+
+[[package]]
+name = "tungstenite"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18e5b8366ee7a95b16d32197d0b2604b43a0be89dc5fac9f8e96ccafbaedda8a"
+dependencies = [
+ "byteorder",
+ "bytes",
+ "data-encoding",
+ "http",
+ "httparse",
+ "log",
+ "rand 0.8.6",
+ "sha1",
+ "thiserror 1.0.69",
+ "utf-8",
+]
 
 [[package]]
 name = "typenum"

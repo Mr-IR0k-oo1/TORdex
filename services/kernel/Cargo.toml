@@ -1,0 +1,80 @@
+[package]
+name = "tordex-kernel"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+# Internal crates
+tordex-core = { workspace = true }
+tordex-config = { workspace = true }
+tordex-types = { workspace = true }
+tordex-events = { workspace = true }
+tordex-drivers = { workspace = true }
+tordex-fabric = { workspace = true }
+tordex-processors = { workspace = true }
+tordex-agents = { workspace = true }
+tordex-monitoring = { workspace = true }
+tordex-decision = { workspace = true }
+tordex-search = { workspace = true }
+tordex-ai-runtime = { workspace = true }
+tordex-temporal-graph = { workspace = true }
+tordex-knowledge = { workspace = true }
+tordex-vifs = { workspace = true }
+tordex-repo-intel = { workspace = true }
+tordex-package-intel = { workspace = true }
+tordex-evidence = { workspace = true }
+tordex-cluster = { workspace = true }
+tordex-apps = { workspace = true }
+tordex-algorithms = { workspace = true }
+
+# Async runtime
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+futures = { workspace = true }
+
+# HTTP / API
+axum = { workspace = true }
+tower-http = { workspace = true }
+tower = { workspace = true }
+reqwest = { workspace = true }
+http = { workspace = true }
+
+# Storage / DB
+sqlx = { workspace = true }
+s3 = { workspace = true }
+redis = { workspace = true }
+
+# IDs / Time
+ulid = { workspace = true }
+time = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Errors
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Processing
+scraper = { workspace = true }
+pulldown-cmark = { workspace = true }
+lopdf = { workspace = true, optional = true }
+zip = { workspace = true, optional = true }
+quick-xml = { workspace = true, optional = true }
+image = { workspace = true, optional = true }
+
+# Misc
+async-trait = { workspace = true }
+regex = { workspace = true }
+bytes = { workspace = true }
+url = { workspace = true }
