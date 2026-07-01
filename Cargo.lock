@@ -3789,6 +3789,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tordex-decision"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "time",
+ "tordex-core",
+ "tracing",
+ "ulid",
+]
+
+[[package]]
 name = "tordex-drivers"
 version = "0.1.0"
 dependencies = [

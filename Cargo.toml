@@ -18,6 +18,7 @@ members = [
     "crates/ai-runtime",
     "crates/agents",
     "crates/monitoring",
+    "crates/decision",
     "evidence/evidence-store",
     "services/api",
 ]
@@ -48,6 +49,7 @@ tordex-search = { path = "crates/search" }
 tordex-ai-runtime = { path = "crates/ai-runtime" }
 tordex-agents = { path = "crates/agents" }
 tordex-monitoring = { path = "crates/monitoring" }
+tordex-decision = { path = "crates/decision" }
 tordex-evidence = { path = "evidence/evidence-store" }
 
 # Async runtime
