@@ -204,6 +204,23 @@ pub enum SystemEvent {
         source_id: String,
         summary: String,
     },
+
+    // ── Agent ──────────────────────────────────────────────────────────────
+    AgentStarted {
+        id: String,
+        name: String,
+        kind: String,
+        version: String,
+    },
+    AgentStopped {
+        id: String,
+        reason: String,
+    },
+    AgentHeartbeat {
+        id: String,
+        status: String,
+        timestamp: OffsetDateTime,
+    },
 }
 
 impl SystemEvent {
@@ -230,6 +247,9 @@ impl SystemEvent {
             | Self::InvestigationClosed { .. }
             | Self::InvestigationArchived { .. } => "Investigation",
             Self::TimelineEntryAdded { .. } => "Timeline",
+            Self::AgentStarted { .. }
+            | Self::AgentStopped { .. }
+            | Self::AgentHeartbeat { .. } => "Agent",
         }
     }
 
@@ -258,6 +278,9 @@ impl SystemEvent {
             Self::InvestigationClosed { .. } => "Closed",
             Self::InvestigationArchived { .. } => "Archived",
             Self::TimelineEntryAdded { .. } => "EntryAdded",
+            Self::AgentStarted { .. } => "Started",
+            Self::AgentStopped { .. } => "Stopped",
+            Self::AgentHeartbeat { .. } => "Heartbeat",
         }
     }
 
@@ -283,6 +306,9 @@ impl SystemEvent {
             | Self::InvestigationClosed { id, .. }
             | Self::InvestigationArchived { id, .. } => id,
             Self::TimelineEntryAdded { id, .. } => id,
+            Self::AgentStarted { id, .. }
+            | Self::AgentStopped { id, .. }
+            | Self::AgentHeartbeat { id, .. } => id,
         }
     }
 

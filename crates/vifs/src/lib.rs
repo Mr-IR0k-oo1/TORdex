@@ -17,6 +17,7 @@ use std::sync::Arc;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use time::OffsetDateTime;
+use ulid::Ulid;
 
 use tordex_core::event_store::{EventStore, SystemEvent};
 use tordex_core::id::{
@@ -832,6 +833,42 @@ impl VirtualIntelligenceFilesystem {
                 };
                 timeline.entries.push(entry);
                 self.write_timeline(&timeline)?;
+            }
+
+            SystemEvent::AgentStarted { id, name, kind, version } => {
+                let record = serde_json::json!({
+                    "id": id,
+                    "name": name,
+                    "kind": kind,
+                    "version": version,
+                    "status": "running",
+                    "timestamp": OffsetDateTime::now_utc().to_string(),
+                });
+                let path = VifsPath::from(&format!("/agents/{id}") as &str);
+                self.write(&path, &serde_json::to_vec(&record).unwrap())?;
+            }
+
+            SystemEvent::AgentStopped { id, reason } => {
+                let record = serde_json::json!({
+                    "id": id,
+                    "status": "stopped",
+                    "reason": reason,
+                    "timestamp": OffsetDateTime::now_utc().to_string(),
+                });
+                let path = VifsPath::from(&format!("/agents/{id}") as &str);
+                self.write(&path, &serde_json::to_vec(&record).unwrap())?;
+            }
+
+            SystemEvent::AgentHeartbeat { id, status, timestamp: _ } => {
+                let record = serde_json::json!({
+                    "agent_id": id,
+                    "status": status,
+                    "timestamp": OffsetDateTime::now_utc().to_string(),
+                });
+                let path = VifsPath::from(
+                    &format!("/agents/{id}/heartbeats/{}", Ulid::new()) as &str,
+                );
+                self.write(&path, &serde_json::to_vec(&record).unwrap())?;
             }
         }
         Ok(())

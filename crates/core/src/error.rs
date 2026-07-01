@@ -12,6 +12,9 @@ pub enum CoreError {
 
     #[error("serialization error: {0}")]
     Serialization(String),
+
+    #[error("agent error: {0}")]
+    Agent(String),
 }
 
 impl CoreError {
@@ -28,6 +31,11 @@ impl CoreError {
     #[must_use]
     pub fn serialization(msg: impl Into<String>) -> Self {
         Self::Serialization(msg.into())
+    }
+
+    #[must_use]
+    pub fn agent(msg: impl Into<String>) -> Self {
+        Self::Agent(msg.into())
     }
 }
 

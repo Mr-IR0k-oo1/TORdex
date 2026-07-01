@@ -1,10 +1,11 @@
 //! libtordex — Intelligence Kernel microkernel.
 //!
 //! Pure-primitive foundation with no knowledge of Tor, HTTP, or any I/O protocol.
-//! Nine modules, each exposing a trait + default in-memory implementation.
+//! Thirteen modules, each exposing a trait + default in-memory implementation.
 
 #![allow(clippy::module_name_repetitions)]
 
+pub mod agent;
 pub mod driver;
 pub mod error;
 pub mod event;
@@ -21,6 +22,9 @@ pub mod security;
 pub mod storage;
 pub mod time;
 
+pub use agent::{
+    Agent, AgentId, AgentManifest, AgentRuntime, AgentStatus, InMemoryAgentRuntime,
+};
 pub use error::CoreError;
 pub use id::{
     ArtifactId, CollectionId, DecisionId, EntityId, EventId, EvidenceId, FindingId,
@@ -70,6 +74,7 @@ pub struct Kernel {
     pub plugin: Box<dyn PluginManager>,
     pub ipc: Box<dyn Ipc>,
     pub objects: Box<dyn ObjectManager>,
+    pub agents: Box<dyn AgentRuntime>,
 }
 
 impl Kernel {
@@ -88,6 +93,7 @@ impl Kernel {
             plugin: Box::new(InMemoryPluginManager::new()),
             ipc: Box::new(InMemoryIpc::new()),
             objects: Box::new(InMemoryObjectManager::new()),
+            agents: Box::new(InMemoryAgentRuntime::new()),
         }
     }
 }
